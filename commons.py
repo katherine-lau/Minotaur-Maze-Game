@@ -56,8 +56,13 @@ def put_button(text, fonttype, fontsize, fontcolor, padding, bgcolor, bordercolo
 
 #Initializing the screen and prepping
 def game_start():
-    global clock, screen
+    global clock, screen, running, playing, paused
     pygame.init()
     clock = pygame.time.Clock()
     screen = pygame.display.set_mode(WINDOW_SIZE)  #window
     pygame.display.set_caption("Minotaur Maze Game")
+    
+"""Exit Program"""
+def exit_game():
+    game_start.running = False
+    pygame.quit()

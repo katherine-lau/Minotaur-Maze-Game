@@ -25,23 +25,23 @@ def main_menu(playing):
 
 """Main()"""
 def main(): #Where all the code is going to go
-    global running, playing, paused, ctrl_pressed, menu
-    running = True  #Show program is running
-    playing = False #Show main menu upon startup
-    paused = True  #Show main menu first
+    global ctrl_pressed, menu
+    commons.running = True  #Show program is running
+    commons.playing = False #Show main menu upon startup
+    commons.paused = True  #Show main menu first
     ctrl_pressed = False    #track if ctrl key is pressed for quit
     
     commons.game_start()
     print("Game started.")
     maze.setup()
     
-    while running:
-        if paused:  #show main menu when paused
-            menu = main_menu(playing)
+    while commons.running:
+        if commons.paused:  #show main menu when paused
+            menu = main_menu(commons.playing)
         
-        if playing and not paused:
+        if commons.playing and not commons.paused:
             if pygame.display.get_init():
-                pause_btn = minotaur.play(paused)
+                pause_btn = minotaur.play(commons.paused)
         
         if pygame.display.get_init():
             mouse = pygame.mouse.get_pos()
@@ -52,18 +52,18 @@ def main(): #Where all the code is going to go
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:   #close button clicked -> game quits and closes
                     print("Program killed.")
-                    running = False
+                    commons.exit_game()
                 elif event.type == pygame.MOUSEBUTTONDOWN:  #mouse click
                     if quit_btn and quit_btn.collidepoint(mouse):
-                        running = False
+                        commons.running = False
                     elif rs_btn and rs_btn.collidepoint(mouse):
-                        if playing:
-                            paused = False
+                        if commons.playing:
+                            commons.paused = False
                         else:
-                            playing = True
-                            paused = False
+                            commons.playing = True
+                            commons.paused = False
                     elif pause_btn and pause_btn.collidepoint(mouse):
-                        paused = True
+                        commons.paused = True
         if pygame.display.get_init():
             pygame.display.flip()
     pygame.quit()

@@ -55,7 +55,7 @@ def play(paused):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 print("Program killed.")
-                running = False
+                commons.exit_game()
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_UP: maze.held_keys["up"] = True
                 elif event.key == pygame.K_DOWN: maze.held_keys["down"] = True
@@ -106,21 +106,21 @@ def play(paused):
         for r in range(commons.GRID_SIZE):
             for c in range(commons.GRID_SIZE):
                 cell_pos = (r,c)
-            visible = False
+                visible = False
 
-            if cell_pos in maze.visitedfog:
-                visible = True
-            elif abs(maze.hero_pos[0] - r) + abs(maze.hero_pos[1] - c) <= 2:
-                visible = True
+                if cell_pos in maze.visitedfog:
+                    visible = True
+                elif abs(maze.hero_pos[0] - r) + abs(maze.hero_pos[1] - c) <= 2:
+                    visible = True
+                
+                rect = pygame.Rect(c * commons.CELL_SIZE, r * commons.CELL_SIZE + commons.HUD_HEIGHT, commons.CELL_SIZE, commons.CELL_SIZE)
             
-            rect = pygame.Rect(c * commons.CELL_SIZE, r * commons.CELL_SIZE + commons.HUD_HEIGHT, commons.CELL_SIZE, commons.CELL_SIZE)
-        
-            if visible:
-            
-                color = commons.BLACK if maze[r][c] == 1 else commons.WHITE
-                pygame.draw.rect(commons.screen, color, rect)
-            else:
-                pygame.draw.rect(commons.screen, (30, 30, 30), rect)
+                if visible:
+                
+                    color = commons.black if maze[r][c] == 1 else commons.white
+                    pygame.draw.rect(commons.screen, color, rect)
+                else:
+                    pygame.draw.rect(commons.screen, (30, 30, 30), rect)
 
         for maze.item in maze.items:
             rect = pygame.Rect(maze.item[1] * commons.CELL_SIZE, maze.item[0] * commons.CELL_SIZE + commons.HUD_HEIGHT, commons.CELL_SIZE, commons.CELL_SIZE)
