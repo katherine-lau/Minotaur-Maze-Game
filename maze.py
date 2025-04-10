@@ -44,6 +44,13 @@ def get_random_empty_cell(maze):
         c = random.randint(0, commons.GRID_SIZE - 1)
         if maze[r][c] == 0:
             return (r, c)
+        
+def get_random_empty_min_cell(maze):
+    while True:
+        r = random.randint((commons.GRID_SIZE//2), commons.GRID_SIZE - 1)
+        c = random.randint((commons.GRID_SIZE//2), commons.GRID_SIZE - 1)
+        if maze[r][c] == 0:
+            return (r, c)
 
 
 # === SETUP MAZE ===
@@ -52,9 +59,9 @@ def setup():
     
     _maze, entrance = generate_maze(commons.GRID_SIZE)
     hero_pos = entrance
-    minotaur_pos = get_random_empty_cell(_maze)
+    minotaur_pos = get_random_empty_min_cell(_maze)
     while minotaur_pos == hero_pos:
-        minotaur_pos = get_random_empty_cell(_maze)
+        minotaur_pos = get_random_empty_min_cell(_maze)
 
 
     #ADDED for the fog/visibility
