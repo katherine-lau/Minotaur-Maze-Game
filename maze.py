@@ -2,6 +2,7 @@
 import random
 import commons
 
+# === MAZE GENERATION (DFS) WITH ENTRANCE ===
 def generate_maze(size):
     maze = [[1 for _ in range(size)] for _ in range(size)]
     stack = []
@@ -12,6 +13,8 @@ def generate_maze(size):
 
     stack.append((1, 1))
     directions = [(-2, 0), (2, 0), (0, -2), (0, 2)]
+    
+    path = [(1,1)]
 
     while stack:
         x, y = stack[-1]
@@ -24,8 +27,10 @@ def generate_maze(size):
         if neighbors:
             nx, ny = random.choice(neighbors)
             maze[(x + nx) // 2][(y + ny) // 2] = 0
-            maze[nx][ny] = 0
+            if random.random() < 0.8:
+                maze[nx][ny] = 0
             stack.append((nx, ny))
+            path.append((nx, ny))
         else:
             stack.pop()
 
@@ -42,13 +47,18 @@ def get_random_empty_cell(maze):
 
 # === SETUP MAZE ===
 def setup():
-    global _maze, entrance, inventory, items, item, hero_pos, minotaur_pos, minotaur_path, minotaur_timer, move_timer, MOVE_INTERVAL, held_keys
+    global _maze, entrance, inventory, items, item, hero_pos, minotaur_pos, minotaur_path, minotaur_timer, move_timer, MOVE_INTERVAL, held_keys, visitedfog
     
     _maze, entrance = generate_maze(commons.GRID_SIZE)
     hero_pos = entrance
     minotaur_pos = get_random_empty_cell(_maze)
     while minotaur_pos == hero_pos:
         minotaur_pos = get_random_empty_cell(_maze)
+
+
+    #ADDED for the fog/visibility
+    visitedfog = set()
+    visitedfog.add(hero_pos)
 
     items = set()
     while len(items) < commons.NUM_ITEMS:

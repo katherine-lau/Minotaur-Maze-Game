@@ -79,6 +79,7 @@ def play(paused):
             new_pos = (maze.hero_pos[0] + dx, maze.hero_pos[1] + dy)
             if 0 <= new_pos[0] < commons.GRID_SIZE and 0 <= new_pos[1] < commons.GRID_SIZE and maze._maze[new_pos[0]][new_pos[1]] == 0:
                 maze.hero_pos = new_pos
+                maze.visitedfog.add(maze.hero_pos)
                 if maze.hero_pos in maze.items:
                     maze.items.remove(maze.hero_pos)
                     maze.inventory += 1
@@ -104,9 +105,22 @@ def play(paused):
         # Draw maze offset below HUD
         for r in range(commons.GRID_SIZE):
             for c in range(commons.GRID_SIZE):
-                color = commons.black if maze._maze[r][c] == 1 else commons.white
-                rect = pygame.Rect(c * commons.CELL_SIZE, r * commons.CELL_SIZE + commons.HUD_HEIGHT, commons.CELL_SIZE, commons.CELL_SIZE)
+                cell_pos = (r,c)
+            visible = False
+
+            if cell_pos in maze.visitedfog:
+                visible = True
+            elif abs(maze.hero_pos[0] - r) + abs(maze.hero_pos[1] - c) <= 2:
+                visible = True
+            
+            rect = pygame.Rect(c * commons.CELL_SIZE, r * commons.CELL_SIZE + commons.HUD_HEIGHT, commons.CELL_SIZE, commons.CELL_SIZE)
+        
+            if visible:
+            
+                color = commons.BLACK if maze[r][c] == 1 else commons.WHITE
                 pygame.draw.rect(commons.screen, color, rect)
+            else:
+                pygame.draw.rect(commons.screen, (30, 30, 30), rect)
 
         for maze.item in maze.items:
             rect = pygame.Rect(maze.item[1] * commons.CELL_SIZE, maze.item[0] * commons.CELL_SIZE + commons.HUD_HEIGHT, commons.CELL_SIZE, commons.CELL_SIZE)
