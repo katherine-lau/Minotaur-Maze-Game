@@ -7,17 +7,17 @@ import commons
 #Main menu screen
 def main_menu(playing):
     commons.screen.fill(commons.red_brown)
-    commons.draw_text('MAIN MENU', 'Arial', 40, commons.black, commons.screen, 540, 200)  #main menu title
+    commons.draw_text('MAIN MENU', 'Arial', 40, commons.black, commons.screen, commons.WINDOW_SIZE[0] / 2, commons.WINDOW_SIZE[1] / 4)  #main menu title
     """CODE FOR MAIN MENU BUTTONS GO HERE"""
     menu = {}
     #if playing -> use "start game" button, else -> use "resume game" button
     if playing:
-        menu['rs_button'] = commons.put_button('Resume Game', 'Arial', 40, commons.black, 20, commons.pale_yellow, commons.black, 10, commons.screen, 540, 400)
+        menu['rs_button'] = commons.put_button('Resume Game', 'Arial', 40, commons.black, 20, commons.pale_yellow, commons.black, 10, commons.screen, commons.WINDOW_SIZE[0] / 2, commons.WINDOW_SIZE[1] / 2)
     else:
-        menu['rs_button'] = commons.put_button('Start Game', 'Arial', 20, commons.black, 20, commons.pale_yellow, commons.black, 10, commons.screen, 540, 400)
+        menu['rs_button'] = commons.put_button('Start Game', 'Arial', 20, commons.black, 20, commons.pale_yellow, commons.black, 10, commons.screen, commons.WINDOW_SIZE[0] / 2, commons.WINDOW_SIZE[1] / 2)
     
     #quit button
-    menu['quit_button'] = commons.put_button('Quit', 'Arial', 20, commons.black, 20, commons.pale_yellow, commons.black, 10, commons.screen, 540, 600)
+    menu['quit_button'] = commons.put_button('Quit', 'Arial', 20, commons.black, 20, commons.pale_yellow, commons.black, 10, commons.screen, commons.WINDOW_SIZE[0] / 2, commons.WINDOW_SIZE[1] / 4 * 3)
     
     pygame.display.flip()
     return menu
@@ -36,12 +36,11 @@ def main(): #Where all the code is going to go
     maze.setup()
     
     while commons.running:
+        global pause_btn
         if commons.paused:  #show main menu when paused
             menu = main_menu(commons.playing)
         
-        if commons.playing and not commons.paused:
-            if pygame.display.get_init():
-                pause_btn = minotaur.play(commons.paused)
+        pause_btn = minotaur.play(commons.paused)
         
         if pygame.display.get_init():
             mouse = pygame.mouse.get_pos()
@@ -62,8 +61,10 @@ def main(): #Where all the code is going to go
                         else:
                             commons.playing = True
                             commons.paused = False
-                    elif pause_btn and pause_btn.collidepoint(mouse):
-                        commons.paused = True
+                elif event.type == pygame.KEYDOWN:  #key click
+                    if event.key == pygame.K_ESCAPE:
+                        commons.paused = not commons.paused
+                        print("Game paused.")
         if pygame.display.get_init():
             pygame.display.flip()
     pygame.quit()

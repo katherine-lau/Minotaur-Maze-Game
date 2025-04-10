@@ -67,7 +67,8 @@ def play(paused):
                 elif event.key == pygame.K_LEFT: maze.held_keys["left"] = False
                 elif event.key == pygame.K_RIGHT: maze.held_keys["right"] = False
 
-        keys = pygame.key.get_pressed() #Gets state of all keys
+        if commons.playing and commons.running:
+            keys = pygame.key.get_pressed() #Gets state of all keys
 
         if maze.move_timer >= maze.MOVE_INTERVAL:
             dx, dy = 0, 0
@@ -96,11 +97,11 @@ def play(paused):
         # === DRAWING ===
         commons.screen.fill(commons.white)
         
-        pause_btn = commons.put_button('Pause', 'Arial Bold', 30, commons.black, 0, commons.bronze, commons.black, 5, commons.screen, 70, 20)
-
         # Draw inventory bar
         pygame.draw.rect(commons.screen, commons.white, (0, 0, commons.WINDOW_SIZE[0], commons.HUD_HEIGHT))
         commons.draw_text(f"Inventory:  {maze.inventory}", 'Arial Bold', 30, commons.black, commons.screen, 70, 20)
+
+        pause_btn = commons.put_button('Pause', 'Arial Bold', 30, commons.black, 10, commons.bronze, commons.black, 5, commons.screen, (commons.WINDOW_SIZE[0] - 50), 20)
 
         # Draw maze offset below HUD
         for r in range(commons.GRID_SIZE):
