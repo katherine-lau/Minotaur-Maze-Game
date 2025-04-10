@@ -4,6 +4,7 @@ import commons
 
 # === MAZE GENERATION (DFS) WITH ENTRANCE ===
 def generate_maze(size):
+    global maze
     maze = [[1 for _ in range(size)] for _ in range(size)]
     stack = []
 

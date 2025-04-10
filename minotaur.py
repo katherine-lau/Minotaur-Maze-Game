@@ -117,7 +117,7 @@ def play(paused):
             
                 if visible:
                 
-                    color = commons.black if maze[r][c] == 1 else commons.white
+                    color = commons.black if maze.maze[r][c] == 1 else commons.white
                     pygame.draw.rect(commons.screen, color, rect)
                 else:
                     pygame.draw.rect(commons.screen, (30, 30, 30), rect)
