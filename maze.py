@@ -1,91 +1,83 @@
-import pygame, sys
+"""For all code involving the maze generation"""
+import random
+import commons
 
-pygame.init()
+# === MAZE GENERATION (DFS) WITH ENTRANCE ===
+def generate_maze(size):
+    global maze
+    maze = [[1 for _ in range(size)] for _ in range(size)]
+    stack = []
 
-screen = pygame.display.set_mode((1080, 1080))  #window
-pygame.display.set_caption("Minotaur Maze Game")
+    entrance = (1, 0)
+    maze[entrance[0]][entrance[1]] = 0
+    maze[1][1] = 0
 
-"""Colors"""
-white = (255,255,255)
-pale_yellow = (255,246,143)
-bronze = (205,102,0)
-red_brown = (139,37,0)
-black = (0,0,0)
-
-"""Fonts"""
-font1 = pygame.font.SysFont(None, 200)
-font2 = pygame.font.SysFont(None, 50)
-
-#draw text on screen
-def draw_text(text, font, fontcolor, surface, x, y):
-    textobj = font.render(text, True, fontcolor)   #txt -> obj
-    textrect = textobj.get_rect(center = (x,y))   #txt obj -> rectangle w/ txt centered
-    surface.blit(textobj, textrect) #txt on surface
+    stack.append((1, 1))
+    directions = [(-2, 0), (2, 0), (0, -2), (0, 2)]
     
-#put btn on screen
-def put_button(text, font, fontcolor, padding, bgcolor, bordercolor, borderwidth, surface, x, y):
-    textobj = font.render(text, True, fontcolor)   #txt -> obj
-    textrect = textobj.get_rect()   #txt obj rectangle
-    
-    btnrect = pygame.Rect(0, 0, textrect.width + 2*padding, textrect.height + 2*padding)    #btn rectangle
-    btnrect.center = (x,y) #center of txt @ (x,y)
-    
-    #draw border if there is one
-    if bordercolor:
-        pygame.draw.rect(surface, bordercolor, btnrect, borderwidth)
-    
-    #give btn a bg
-    bg = btnrect.inflate(-borderwidth * 2, -borderwidth * 2)
-    pygame.draw.rect(surface, bgcolor, bg)
-    
-    #put txt on bg
-    textrect.center = btnrect.center
-    surface.blit(textobj, textrect) #txt on btn
-    
-    return btnrect  #when button is clicked
+    path = [(1,1)]
 
-#main menu screen
-def main_menu(playing):
-    screen.fill(red_brown)
-    draw_text('MAIN MENU', font1, black, screen, 540, 200)  #main menu title
-    """CODE FOR MAIN MENU BUTTONS GO HERE"""
-    #if playing -> use "start game" button, else -> use "resume game" button
-    if playing:
-        sr_btn = put_button('Resume Game', font2, black, 20, pale_yellow, black, 10, screen, 540, 400)
-    else:
-        sr_btn = put_button('Start Game', font2, black, 20, pale_yellow, black, 10, screen, 540, 400)
-    pygame.display.flip()
-    return sr_btn
+    while stack:
+        x, y = stack[-1]
+        neighbors = []
+        for dx, dy in directions:
+            nx, ny = x + dx, y + dy
+            if 1 <= nx < size - 1 and 1 <= ny < size - 1 and maze[nx][ny] == 1:
+                neighbors.append((nx, ny))
 
-#ALL FUNCTIONS GO ABOVE main()
-def main(): #Where all the code is going to go
-    running = True
-    playing = False #Show main menu upon startup
-    paused = True  #Show main menu first
-    while running:
-        if paused:  #show main menu when paused
-            sr_btn = main_menu(playing)
+        if neighbors:
+            nx, ny = random.choice(neighbors)
+            maze[(x + nx) // 2][(y + ny) // 2] = 0
+            if random.random() < 0.8:
+                maze[nx][ny] = 0
+            stack.append((nx, ny))
+            path.append((nx, ny))
+        else:
+            stack.pop()
+
+    return maze, entrance
+
+# === FIND RANDOM EMPTY CELL ===
+def get_random_empty_cell(maze):
+    while True:
+        r = random.randint(0, commons.GRID_SIZE - 1)
+        c = random.randint(0, commons.GRID_SIZE - 1)
+        if maze[r][c] == 0:
+            return (r, c)
         
-        #program quit, game start, game pause
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:   #close button clicked -> game quits and closes
-                running = False
-            elif event.type == pygame.MOUSEBUTTONDOWN:  #play button clicked
-                mouse_pos = pygame.mouse.get_pos()
-                if paused:  #menu open
-                    if sr_btn.collidepoint(mouse_pos):
-                        playing = True  #game started
-                        paused = False  #game playing
-            elif event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_ESCAPE and playing:   #esc clicked -> toggle menu while paused
-                    paused = not paused #pause/unpause game
-                    
-        if playing and not paused:
-            """ALL GAME CODE GOES HERE"""
-            screen.fill(white)  #this is dummy code
-                    
-        pygame.display.flip()
+def get_random_empty_min_cell(maze):
+    while True:
+        r = random.randint((commons.GRID_SIZE//2), commons.GRID_SIZE - 1)
+        c = random.randint((commons.GRID_SIZE//2), commons.GRID_SIZE - 1)
+        if maze[r][c] == 0:
+            return (r, c)
+
+
+# === SETUP MAZE ===
+def setup():
+    global _maze, entrance, inventory, items, item, hero_pos, minotaur_pos, minotaur_path, minotaur_timer, move_timer, MOVE_INTERVAL, held_keys, visitedfog
     
-    
-if __name__ == "__main__":  #so game is only run when wanted, __name__ = name of file
-    main()
+    _maze, entrance = generate_maze(commons.GRID_SIZE)
+    hero_pos = entrance
+    minotaur_pos = get_random_empty_min_cell(_maze)
+    while minotaur_pos == hero_pos:
+        minotaur_pos = get_random_empty_min_cell(_maze)
+
+
+    #ADDED for the fog/visibility
+    visitedfog = set()
+    visitedfog.add(hero_pos)
+
+    items = set()
+    while len(items) < commons.NUM_ITEMS:
+        item = get_random_empty_cell(_maze)
+        if item != hero_pos and item != minotaur_pos:
+            items.add(item)
+
+    inventory = 0
+
+    minotaur_path = []
+    minotaur_timer = 0
+    move_timer = 0
+    MOVE_INTERVAL = 0.1  # seconds between hero movement when key is held
+    held_keys = {"up": False, "down": False, "left": False, "right": False}
