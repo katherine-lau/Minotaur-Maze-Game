@@ -49,6 +49,9 @@ def play(paused):
     
     while running and not paused:
         
+        if not pygame.display.get_init():
+            return
+        
         dt = commons.clock.tick(commons.FPS) / 1000
         maze.move_timer += dt
 
@@ -57,7 +60,11 @@ def play(paused):
                 print("Program killed.")
                 commons.exit_game()
             elif event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_UP: maze.held_keys["up"] = True
+                if event.key == pygame.K_ESCAPE:
+                    commons.paused = True
+                    print("Game paused.")
+                    return  #Go to main menu, Game paused
+                elif event.key == pygame.K_UP: maze.held_keys["up"] = True
                 elif event.key == pygame.K_DOWN: maze.held_keys["down"] = True
                 elif event.key == pygame.K_LEFT: maze.held_keys["left"] = True
                 elif event.key == pygame.K_RIGHT: maze.held_keys["right"] = True
@@ -95,13 +102,13 @@ def play(paused):
             maze.minotaur_timer = 0
 
         # === DRAWING ===
+        if not pygame.display.get_init():
+            return
         commons.screen.fill(commons.white)
         
         # Draw inventory bar
         pygame.draw.rect(commons.screen, commons.white, (0, 0, commons.WINDOW_SIZE[0], commons.HUD_HEIGHT))
         commons.draw_text(f"Inventory:  {maze.inventory}", 'Arial Bold', 30, commons.black, commons.screen, 70, 20)
-
-        pause_btn = commons.put_button('Pause', 'Arial Bold', 30, commons.black, 10, commons.bronze, commons.black, 5, commons.screen, (commons.WINDOW_SIZE[0] - 50), 20)
 
         # Draw maze offset below HUD
         for r in range(commons.GRID_SIZE):
@@ -123,14 +130,15 @@ def play(paused):
                 else:
                     pygame.draw.rect(commons.screen, (30, 30, 30), rect)
 
-        for maze.item in maze.items:
+        for item in maze.items:
             rect = pygame.Rect(maze.item[1] * commons.CELL_SIZE, maze.item[0] * commons.CELL_SIZE + commons.HUD_HEIGHT, commons.CELL_SIZE, commons.CELL_SIZE)
             pygame.draw.rect(commons.screen, commons.pale_yellow, rect)
 
         pygame.draw.rect(commons.screen, commons.bronze, (maze.hero_pos[1] * commons.CELL_SIZE, maze.hero_pos[0] * commons.CELL_SIZE + commons.HUD_HEIGHT, commons.CELL_SIZE, commons.CELL_SIZE))
         pygame.draw.rect(commons.screen, commons.red_brown, (maze.minotaur_pos[1] * commons.CELL_SIZE, maze.minotaur_pos[0] * commons.CELL_SIZE + commons.HUD_HEIGHT, commons.CELL_SIZE, commons.CELL_SIZE))
 
+        if not pygame.display.get_init():
+            return
         pygame.display.flip()
 
     pygame.quit()
-    return pause_btn

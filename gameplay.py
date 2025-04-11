@@ -36,37 +36,52 @@ def main(): #Where all the code is going to go
     maze.setup()
     
     while commons.running:
-        global pause_btn
+        if not pygame.display.get_init():
+            break
+        
         if commons.paused:  #show main menu when paused
             menu = main_menu(commons.playing)
         
-        pause_btn = minotaur.play(commons.paused)
+        if not pygame.display.get_init():
+            break
         
-        if pygame.display.get_init():
-            mouse = pygame.mouse.get_pos()
-            quit_btn = menu.get('quit_button', None)
-            rs_btn = menu.get('rs_button', None)
+        minotaur.play(commons.paused)
         
-            #program quit, game start, game pause
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:   #close button clicked -> game quits and closes
-                    print("Program killed.")
+        if not pygame.display.get_init():
+            break
+        
+        mouse = pygame.mouse.get_pos()
+        quit_btn = menu.get('quit_button', None)
+        rs_btn = menu.get('rs_button', None)
+    
+        #program quit, game start, game pause
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:   #close button clicked -> game quits and closes
+                print("Program killed.")
+                commons.exit_game()
+                break
+            elif event.type == pygame.MOUSEBUTTONDOWN:  #mouse click
+                if quit_btn and quit_btn.collidepoint(mouse):
+                    print("Program quit.")
                     commons.exit_game()
-                elif event.type == pygame.MOUSEBUTTONDOWN:  #mouse click
-                    if quit_btn and quit_btn.collidepoint(mouse):
-                        commons.running = False
-                    elif rs_btn and rs_btn.collidepoint(mouse):
-                        if commons.playing:
-                            commons.paused = False
-                        else:
-                            commons.playing = True
-                            commons.paused = False
-                elif event.type == pygame.KEYDOWN:  #key click
-                    if event.key == pygame.K_ESCAPE:
+                    break
+                elif rs_btn and rs_btn.collidepoint(mouse):
+                    if commons.playing:
+                        commons.paused = False
+                    else:
+                        commons.playing = True
+                        commons.paused = False
+            elif event.type == pygame.KEYDOWN:  #key click
+                if event.key == pygame.K_ESCAPE:
+                    if commons.playing:
                         commons.paused = not commons.paused
-                        print("Game paused.")
-        if pygame.display.get_init():
-            pygame.display.flip()
+                        if commons.paused:
+                            print("Game paused.")
+                        else:
+                            print("Game resumed.")
+        if not pygame.display.get_init():
+            return
+        pygame.display.flip()
     pygame.quit()
     print("Game closed.")
 

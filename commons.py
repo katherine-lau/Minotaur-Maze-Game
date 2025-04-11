@@ -64,5 +64,6 @@ def game_start():
     
 """Exit Program"""
 def exit_game():
-    game_start.running = False
+    global running
+    running = False
     pygame.quit()
