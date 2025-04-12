@@ -34,7 +34,9 @@ def inventory():
     if commons.inventory_open:
         pygame.draw.rect(commons.screen, commons.bronze, (0, commons.WINDOW_SIZE[1] / 2, commons.WINDOW_SIZE[0], commons.WINDOW_SIZE[1]))
         commons.draw_text('INVENTORY', 'Arial', 40, commons.pale_yellow, commons.screen, commons.WINDOW_SIZE[0] / 2, commons.WINDOW_SIZE[1] / 2 + 30)  #inventory title
-        """OTHER CODE FOR INVENTORY"""
+        pygame.draw.rect(commons.screen, commons.white, (0, commons.WINDOW_SIZE[1] / 16 * 9, commons.WINDOW_SIZE[0], commons.WINDOW_SIZE[1]))
+        commons.draw_text(f'Items: {maze.inventory}', 'Arial', 20, commons.black, commons.screen, 40, commons.WINDOW_SIZE[1] / 20 * 11)
+        """OTHER CODE FOR INVENTORY ITEMS"""
         
         pygame.display.flip()
         

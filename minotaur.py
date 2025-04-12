@@ -105,9 +105,6 @@ def play(paused):
         # === DRAWING ===
         if not pygame.display.get_init():
             return
-        
-        if not pygame.display.get_init():
-            return
         commons.screen.fill(commons.white)
         
         # Draw inventory bar
