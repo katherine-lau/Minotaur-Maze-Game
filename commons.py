@@ -51,10 +51,7 @@ def put_button(text, fonttype, fontsize, fontcolor, padding, bgcolor, bordercolo
     
     return btnrect  #when button is clicked
 
-
-"""ALL FUNCTIONS GO ABOVE THIS LINE"""
-
-#Initializing the screen and prepping
+"""Initializing the screen and prepping"""
 def game_start():
     global clock, screen, running, playing, paused
     pygame.init()
@@ -67,3 +64,6 @@ def exit_game():
     global running
     running = False
     pygame.quit()
+
+state = 'menu'  #menu, manual, playing
+inventory_open = False

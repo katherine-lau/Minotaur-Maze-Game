@@ -57,13 +57,14 @@ def play(paused):
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                print("Program killed.")
                 commons.exit_game()
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     commons.paused = True
-                    print("Game paused.")
                     return  #Go to main menu, Game paused
+                elif event.key == pygame.K_i:
+                    commons.inventory_open = not commons.inventory_open
+                    return  #Go to inventory, Game paused
                 elif event.key == pygame.K_UP: maze.held_keys["up"] = True
                 elif event.key == pygame.K_DOWN: maze.held_keys["down"] = True
                 elif event.key == pygame.K_LEFT: maze.held_keys["left"] = True
@@ -104,6 +105,9 @@ def play(paused):
         # === DRAWING ===
         if not pygame.display.get_init():
             return
+        
+        if not pygame.display.get_init():
+            return
         commons.screen.fill(commons.white)
         
         # Draw inventory bar
@@ -131,7 +135,7 @@ def play(paused):
                     pygame.draw.rect(commons.screen, (30, 30, 30), rect)
 
         for item in maze.items:
-            rect = pygame.Rect(maze.item[1] * commons.CELL_SIZE, maze.item[0] * commons.CELL_SIZE + commons.HUD_HEIGHT, commons.CELL_SIZE, commons.CELL_SIZE)
+            rect = pygame.Rect(item[1] * commons.CELL_SIZE, item[0] * commons.CELL_SIZE + commons.HUD_HEIGHT, commons.CELL_SIZE, commons.CELL_SIZE)
             pygame.draw.rect(commons.screen, commons.pale_yellow, rect)
 
         pygame.draw.rect(commons.screen, commons.bronze, (maze.hero_pos[1] * commons.CELL_SIZE, maze.hero_pos[0] * commons.CELL_SIZE + commons.HUD_HEIGHT, commons.CELL_SIZE, commons.CELL_SIZE))
