@@ -1,7 +1,9 @@
 import pygame
 import heapq
+import random
 import commons
 import maze
+import links
 
 # === A* ALGORITHM ===
 def a_star(maze, start, goal):
@@ -44,7 +46,7 @@ def play(paused):
     # === GAME LOOP ===
 
     running = True
-    global pause_btn
+    global pause_btn, item_message, item_timer
     pause_btn = None #Initialization
     
     while running and not paused:
@@ -91,8 +93,16 @@ def play(paused):
                 maze.visitedfog.add(maze.hero_pos)
                 if maze.hero_pos in maze.items:
                     maze.items.remove(maze.hero_pos)
+                    picked = random.choice(maze.available_items)
+                    links.available_items.remove(picked)
+                    maze.inventory_items.append(picked)
                     maze.inventory += 1
+                    item_message = f"Picked up: {picked['name']}"
+                    item_timer = pygame.time.get_ticks() + 2000
+                    
             maze.move_timer = 0
+            item_message = None
+            item_timer = 0
 
         # === MINOTAUR MOVEMENT ===
         maze.minotaur_timer += dt

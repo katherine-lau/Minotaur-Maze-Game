@@ -2,6 +2,7 @@
 import pygame
 import maze
 import minotaur
+from links import available_items
 import commons
 
 #Main menu screen
@@ -34,9 +35,62 @@ def inventory():
     if commons.inventory_open:
         pygame.draw.rect(commons.screen, commons.bronze, (0, commons.WINDOW_SIZE[1] / 2, commons.WINDOW_SIZE[0], commons.WINDOW_SIZE[1]))
         commons.draw_text('INVENTORY', 'Arial', 40, commons.pale_yellow, commons.screen, commons.WINDOW_SIZE[0] / 2, commons.WINDOW_SIZE[1] / 2 + 30)  #inventory title
-        pygame.draw.rect(commons.screen, commons.white, (0, commons.WINDOW_SIZE[1] / 16 * 9, commons.WINDOW_SIZE[0], commons.WINDOW_SIZE[1]))
         commons.draw_text(f'Items: {maze.inventory}', 'Arial', 20, commons.black, commons.screen, 40, commons.WINDOW_SIZE[1] / 20 * 11)
-        """OTHER CODE FOR INVENTORY ITEMS"""
+        
+        pygame.draw.rect(commons.screen, commons.white, (0, commons.WINDOW_SIZE[1] * 9 / 16, commons.WINDOW_SIZE[0], commons.WINDOW_SIZE[1]))
+        
+        #item slots
+        s_width = 80
+        s_height = 80
+        spacing = 20
+        start_x = 20
+        start_y = commons.WINDOW_SIZE[1] * 9 / 16 + 20
+        
+        ipr = (commons.WINDOW_SIZE[0] - start_x * 2) // (s_width + spacing)
+        hovered = None
+        
+        for i, item in enumerate(maze.inventory_items):
+            row = i // ipr
+            col = 1 % ipr
+            x = start_x + col * (s_width + spacing)
+            y = start_y + row * (s_height + spacing)
+            
+            slot = pygame.Rect(x, y, s_width, s_height)
+            pygame.draw.rect(commons.screen, commons.pale_yellow, slot)
+            pygame.draw.rect(commons.screen, commons.black, slot, 2)
+            
+            icon = pygame.transform.scale(item["icon"], (50, 50))
+            icon_pos = (x + (s_width - 50) //2, y + 5)
+            commons.screen.blit(icon, icon_pos)
+            
+            commons.draw_text(item["name"], 'Arial', 12, commons.black, commons.screen, x + s_width / 2, y + s_height - 15)
+
+            #Detect hover
+            if rect.collidepoint(pygame.mouse.get_pos()):
+                hovered = item
+                
+            if hovered:
+                popup_txt = f"{hovered['name']}: {hovered['description']}"
+                font = pygame.font.SysFont('Arial', 16)
+                text = font.render(popup_txt, True, commons.bronze)
+                rect = text.get_rect()
+                rect.topleft = (pygame.mouse.get_pos()[0] + 10, pygame.mouse.get_pos()[1] + 10)
+                pygame.draw.rect(commons.screen, commons.pale_yellow, rect.inflate(10, 10))
+                pygame.draw.rect(commons.screen, commons.black, rect.inflate(10, 10), 2)
+                commons.screen.blit(text, rect)
+
+
+            #item picked up
+            current_time = pygame.time.get_ticks()
+            if minotaur.item_message and current_time < minotaur.item_timer:
+                font = pygame.font.SysFont('Arial', 24)
+                text = font.render(minotaur.item_message, True, commons.bronze)
+                rect = text.get_rect(center = (commons.WINDOW_SIZE[0] // 2, commons.WINDOW_SIZE[1] // 2 - 100))
+                
+                pygame.draw.rect(commons. screen, commons. black, rect.inflate(20, 10))
+                commons.screen.blit(text, rect)
+            elif minotaur.item_message and current_time >= minotaur.item_timer:
+                minotaur.item_message = None
         
         pygame.display.flip()
         
@@ -60,6 +114,7 @@ def main(): #Where all the code is going to go
     commons.paused = True  #Show main menu first
     commons.inventory_open = False
     ctrl_pressed = False    #track if ctrl key is pressed for quit
+    
     
     commons.game_start()
     print("Game started.")
