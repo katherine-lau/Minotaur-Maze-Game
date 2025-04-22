@@ -141,12 +141,12 @@ def play(paused):
                 else:
                     pygame.draw.rect(commons.screen, (30, 30, 30), rect)
 
-        for item in maze.items:
-            rect = pygame.Rect(item[1] * commons.CELL_SIZE, item[0] * commons.CELL_SIZE + commons.HUD_HEIGHT, commons.CELL_SIZE, commons.CELL_SIZE)
-            pygame.draw.rect(commons.screen, commons.pale_yellow, rect)
+        for maze.item in maze.items:
+            rect = pygame.Rect(maze.item[1] * commons.CELL_SIZE, maze.item[0] * commons.CELL_SIZE + commons.HUD_HEIGHT, commons.CELL_SIZE, commons.CELL_SIZE)
+            commons.screen.blit(commons.artifact_img, rect)
 
-        pygame.draw.rect(commons.screen, commons.bronze, (maze.hero_pos[1] * commons.CELL_SIZE, maze.hero_pos[0] * commons.CELL_SIZE + commons.HUD_HEIGHT, commons.CELL_SIZE, commons.CELL_SIZE))
-        pygame.draw.rect(commons.screen, commons.red_brown, (maze.minotaur_pos[1] * commons.CELL_SIZE, maze.minotaur_pos[0] * commons.CELL_SIZE + commons.HUD_HEIGHT, commons.CELL_SIZE, commons.CELL_SIZE))
+        commons.screen.blit(commons.hero_img, (maze.hero_pos[1] * commons.CELL_SIZE, maze.hero_pos[0] * commons.CELL_SIZE + commons.HUD_HEIGHT))
+        commons.screen.blit(commons.minotaur_img, (maze.minotaur_pos[1] * commons.CELL_SIZE, maze.minotaur_pos[0] * commons.CELL_SIZE + commons.HUD_HEIGHT))
 
         if not pygame.display.get_init():
             return
