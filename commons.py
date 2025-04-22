@@ -7,7 +7,7 @@ CELL_SIZE = 23
 HUD_HEIGHT = 30
 WINDOW_SIZE = (GRID_SIZE * CELL_SIZE, GRID_SIZE * CELL_SIZE + HUD_HEIGHT)
 FPS = 60
-MINOTAUR_MOVE_INTERVAL = 0.8  # seconds between minotaur steps
+MINOTAUR_MOVE_INTERVAL = 0.5  # seconds between minotaur steps
 NUM_ITEMS = 20  # Number of yellow squares
 
 """Color vars"""
