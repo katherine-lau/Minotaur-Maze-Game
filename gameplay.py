@@ -71,7 +71,7 @@ def inventory():
             if hovered:
                 popup_txt = f"{hovered['name']}: {hovered['description']}"
                 font = pygame.font.SysFont('Arial', 16)
-                text = font.render(popup_txt, True, commons.bronze)
+                text = font.render(popup_txt, True, commons.red_brown)
                 rect = text.get_rect()
                 rect.topleft = (pygame.mouse.get_pos()[0] + 10, pygame.mouse.get_pos()[1] + 10)
                 pygame.draw.rect(commons.screen, commons.pale_yellow, rect.inflate(10, 10))
