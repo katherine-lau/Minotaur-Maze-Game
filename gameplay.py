@@ -101,7 +101,7 @@ def manual():
     commons.draw_text('HOW TO PLAY', 'Arial', 40, commons.pale_yellow, commons.screen, commons.WINDOW_SIZE[0] / 2, commons.WINDOW_SIZE[1] / 4)
     commons.draw_text(' - Use arrow keys to move', 'Arial', 40, commons.pale_yellow, commons.screen, commons.WINDOW_SIZE[0] / 2, commons.WINDOW_SIZE[1] / 8 * 3)
     commons.draw_text(' - I to open inventory (tap I again to close)', 'Arial', 40, commons.pale_yellow, commons.screen, commons.WINDOW_SIZE[0] / 2, commons.WINDOW_SIZE[1] / 8 * 4)
-    commons.draw_text(' - Double tap ESC to pause', 'Arial', 40, commons.pale_yellow, commons.screen, commons.WINDOW_SIZE[0] / 2, commons.WINDOW_SIZE[1] / 8 * 5)
+    commons.draw_text(' - Double tap ESC to pause and then open main menu', 'Arial', 40, commons.pale_yellow, commons.screen, commons.WINDOW_SIZE[0] / 2, commons.WINDOW_SIZE[1] / 8 * 5)
     commons.draw_text('Press ESC to return', 'Arial', 40, commons.pale_yellow, commons.screen, commons.WINDOW_SIZE[0] / 2, commons.WINDOW_SIZE[1] / 8 * 6)
     pygame.display.flip()
     
