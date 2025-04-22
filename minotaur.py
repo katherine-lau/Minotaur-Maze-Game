@@ -93,7 +93,7 @@ def play(paused):
                 maze.visitedfog.add(maze.hero_pos)
                 if maze.hero_pos in maze.items:
                     maze.items.remove(maze.hero_pos)
-                    picked = random.choice(maze.available_items)
+                    picked = random.choice(links.available_items)
                     links.available_items.remove(picked)
                     maze.inventory_items.append(picked)
                     maze.inventory += 1

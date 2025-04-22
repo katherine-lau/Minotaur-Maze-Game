@@ -2,7 +2,6 @@
 import pygame
 import maze
 import minotaur
-from links import available_items
 import commons
 
 #Main menu screen
@@ -51,7 +50,7 @@ def inventory():
         
         for i, item in enumerate(maze.inventory_items):
             row = i // ipr
-            col = 1 % ipr
+            col = i % ipr
             x = start_x + col * (s_width + spacing)
             y = start_y + row * (s_height + spacing)
             
@@ -66,7 +65,7 @@ def inventory():
             commons.draw_text(item["name"], 'Arial', 12, commons.black, commons.screen, x + s_width / 2, y + s_height - 15)
 
             #Detect hover
-            if rect.collidepoint(pygame.mouse.get_pos()):
+            if slot.collidepoint(pygame.mouse.get_pos()):
                 hovered = item
                 
             if hovered:
