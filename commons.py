@@ -17,6 +17,16 @@ bronze = (205,102,0)
 red_brown = (139,37,0)
 black = (0,0,0)
 
+#Sets icons
+hero_img = pygame.image.load("assets/hero.png")
+hero_img = pygame.transform.scale(hero_img, (CELL_SIZE, CELL_SIZE))
+
+minotaur_img = pygame.image.load("assets/minotaur.png")
+minotaur_img = pygame.transform.scale(minotaur_img, (CELL_SIZE, CELL_SIZE))
+
+artifact_img = pygame.image.load("assets/artifact.png")
+artifact_img = pygame.transform.scale(artifact_img, (CELL_SIZE, CELL_SIZE))
+
 #Sets font
 def set_font(font, size):
     return pygame.font.SysFont(font, size)
