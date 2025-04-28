@@ -40,7 +40,7 @@ def a_star(maze, start, goal):
     return []  # no path
 
 #minatour attacking function
-def attack():
+def min_attack():
     if maze.hero_pos == maze.minotaur_pos:
         maze.hero_hp -= 10
 
@@ -119,7 +119,7 @@ def play(paused):
             maze.minotaur_timer = 0
 
         # === MINOTAUR ATTACK ===
-        attack()
+        min_attack()
         #checking if hero is dead
         if maze.hero_hp <= 0:
             death_screen.death_screen()
