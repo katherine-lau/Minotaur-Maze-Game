@@ -1,7 +1,5 @@
 #for all common occurances to prevent import loops
 import pygame
-import maze
-import gameplay
 
 """Screen vars"""
 GRID_SIZE = 33#47  # Must be odd to ensure single-width walls
