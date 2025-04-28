@@ -58,6 +58,7 @@ def setup():
     global _maze, entrance, inventory, inventory_items, available_items, items, item, hero_pos, minotaur_pos, minotaur_path, minotaur_timer, move_timer, MOVE_INTERVAL, held_keys, visitedfog, hero_hp, minotaur_hp
     hero_hp = 1000
     minotaur_hp = 2000
+
     
     _maze, entrance = generate_maze(commons.GRID_SIZE)
     hero_pos = entrance

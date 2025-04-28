@@ -5,6 +5,7 @@ import commons
 import maze
 import links
 import death_screen
+import hero
 
 # === A* ALGORITHM ===
 def a_star(maze, start, goal):
@@ -41,9 +42,8 @@ def a_star(maze, start, goal):
 
 #minatour attacking function
 def min_attack():
-    if maze.hero_pos == maze.minotaur_pos:
+    if maze.hero_pos == maze.minotaur_pos and not shield:
         maze.hero_hp -= 10
-
 def play(paused):
     
     if paused:
@@ -52,7 +52,7 @@ def play(paused):
     # === GAME LOOP ===
 
     running = True
-    global pause_btn, item_message, item_timer
+    global pause_btn, item_message, item_timer, sword, shield
     pause_btn = None #Initialization
     
     while running and not paused:
@@ -110,6 +110,7 @@ def play(paused):
             item_message = None
             item_timer = 0
 
+        
         # === MINOTAUR MOVEMENT ===
         maze.minotaur_timer += dt
         if maze.minotaur_timer >= commons.MINOTAUR_MOVE_INTERVAL:
@@ -118,12 +119,25 @@ def play(paused):
                 maze.minotaur_pos = maze.minotaur_path[1]
             maze.minotaur_timer = 0
 
+        #checking items of hero
+        sword, shield = hero.has_sword_or_shield(maze.inventory_items)
+
+        # === HERO ATTACK ===
+        hero.hero_attack()
+
         # === MINOTAUR ATTACK ===
         min_attack()
+
         #checking if hero is dead
         if maze.hero_hp <= 0:
             death_screen.death_screen()
             return
+        #checking if minatour is dead
+        if maze.minotaur_hp <= 0:
+            death_screen.defeated_min()
+            return
+        
+
         # === DRAWING ===
         if not pygame.display.get_init():
             return
