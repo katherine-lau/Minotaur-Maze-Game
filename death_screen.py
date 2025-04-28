@@ -2,6 +2,8 @@
 import pygame
 import commons
 import gameplay
+import links
+import maze
 
 def death_screen():
         font = pygame.font.SysFont('Arial', 50)
@@ -14,6 +16,10 @@ def death_screen():
                     commons.exit_game()
                 elif event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_RETURN:
+                        for item in maze.inventory_items[:]:
+                            maze.inventory -= 1
+                            maze.inventory_items.remove(item)
+                            links.available_items.append(item)
                         commons.paused = True
                         commons.playing = False
                         commons.state = 'menu'
