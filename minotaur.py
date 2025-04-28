@@ -4,6 +4,7 @@ import random
 import commons
 import maze
 import links
+import death_screen
 
 # === A* ALGORITHM ===
 def a_star(maze, start, goal):
@@ -37,6 +38,11 @@ def a_star(maze, start, goal):
                     heapq.heappush(open_set, (tentative_g + h(neighbor, goal), tentative_g, neighbor))
 
     return []  # no path
+
+#minatour attacking function
+def min_attack():
+    if maze.hero_pos == maze.minotaur_pos:
+        maze.hero_hp -= 10
 
 def play(paused):
     
@@ -112,6 +118,12 @@ def play(paused):
                 maze.minotaur_pos = maze.minotaur_path[1]
             maze.minotaur_timer = 0
 
+        # === MINOTAUR ATTACK ===
+        min_attack()
+        #checking if hero is dead
+        if maze.hero_hp <= 0:
+            death_screen.death_screen()
+            return
         # === DRAWING ===
         if not pygame.display.get_init():
             return
@@ -120,6 +132,15 @@ def play(paused):
         # Draw inventory bar
         pygame.draw.rect(commons.screen, commons.white, (0, 0, commons.WINDOW_SIZE[0], commons.HUD_HEIGHT))
         commons.draw_text(f"Inventory:  {maze.inventory}", 'Arial Bold', 30, commons.black, commons.screen, 70, 20)
+
+        #display hp stat
+        commons.draw_text(f"Hero HP", 'Arial Bold', 30, commons.black, commons.screen, 250, 20)
+        commons.draw_text(f"Minotaur HP", 'Arial Bold', 30, commons.black, commons.screen, 500, 20)
+        #hero health bar
+        commons.draw_health_bar(commons.screen, 300, 10, 100, 20, maze.hero_hp, 1000, (0,255,0))
+        #minatour health bar
+        commons.draw_health_bar(commons.screen, 570, 10, 100, 20, maze.minotaur_hp, 2000, (255,0,0))
+        
 
         # Draw maze offset below HUD
         for r in range(commons.GRID_SIZE):
@@ -148,8 +169,13 @@ def play(paused):
         commons.screen.blit(commons.hero_img, (maze.hero_pos[1] * commons.CELL_SIZE, maze.hero_pos[0] * commons.CELL_SIZE + commons.HUD_HEIGHT))
         commons.screen.blit(commons.minotaur_img, (maze.minotaur_pos[1] * commons.CELL_SIZE, maze.minotaur_pos[0] * commons.CELL_SIZE + commons.HUD_HEIGHT))
 
+        
+
         if not pygame.display.get_init():
             return
         pygame.display.flip()
+
+
+
 
     pygame.quit()
