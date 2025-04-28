@@ -41,7 +41,8 @@ def defeated_min():
         
         font = pygame.font.SysFont('Arial', 50)
         small_font = pygame.font.SysFont('Arial', 30)
-        running = True
+        gameplay.running = True
+        gameplay.paused = True
 
         while running:
             for event in pygame.event.get():
