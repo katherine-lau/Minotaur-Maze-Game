@@ -21,12 +21,13 @@ def death_screen():
                     commons.exit_game()
                 elif event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_RETURN:
+                        for item in maze.inventory_items[:]:
+                            maze.inventory -= 1
+                            maze.inventory_items.remove(item)
+                            links.available_items.append(item)
                         commons.paused = True
                         commons.playing = False
                         commons.state = 'menu'
-                        for item in maze.inventory_items[:]:  
-                               maze.inventory_items.remove(item)
-                               links.available_items.append(item)
                         gameplay.main()
                         return  #Go back to main menu
 
@@ -36,7 +37,6 @@ def death_screen():
             commons.screen.blit(text, (commons.WINDOW_SIZE[0] // 2 - text.get_width() // 2, commons.WINDOW_SIZE[1] // 3))                
             commons.screen.blit(info, (commons.WINDOW_SIZE[0] // 2 - info.get_width() // 2, commons.WINDOW_SIZE[1] // 2))
             pygame.display.flip()
-
 def defeated_min():
         
         font = pygame.font.SysFont('Arial', 50)
