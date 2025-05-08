@@ -6,6 +6,7 @@ import maze
 import links
 import death_screen
 import hero
+import prob
 
 # === A* ALGORITHM ===
 def a_star(maze, start, goal):
@@ -42,8 +43,12 @@ def a_star(maze, start, goal):
 
 #minatour attacking function
 def min_attack():
-    if maze.hero_pos == maze.minotaur_pos and not shield:
-        maze.hero_hp -= 10
+    if maze.hero_pos == maze.minotaur_pos:
+        if not shield:
+            maze.hero_hp -= 100
+        else:
+            maze.hero_hp -= 5
+    
 def play(paused):
     
     if paused:
@@ -120,10 +125,12 @@ def play(paused):
             maze.minotaur_timer = 0
 
         #checking items of hero
-        sword, shield = hero.has_sword_or_shield(maze.inventory_items)
-
+        sword, shield, hp_amulet, ow_amulet, ow_min_amulet, t_speed_amulet, min_speed_amulet = hero.has_item(maze.inventory_items)
+        
         # === HERO ATTACK ===
-        hero.hero_attack()
+        global hero_damage, minotaur_damage
+        hero_damage = 100
+        hero.hero_attack(maze.inventory_items, hero_damage)
 
         # === MINOTAUR ATTACK ===
         min_attack()
@@ -136,7 +143,32 @@ def play(paused):
         if maze.minotaur_hp <= 0:
             death_screen.defeated_min()
             return
-        
+        #artifact checks and effects applied 
+        if hp_amulet and not maze.hp_amulet_used:
+            maze.hero_hp = 10000
+            maze.hp_amulet_used = True 
+        if ow_amulet and not maze.ow_amulet_used:
+            maze.hero_hp = maze.hero_hp * 0.5
+            maze.ow_amulet_used = True 
+        if ow_min_amulet and not maze.ow_min_amulet_used:
+            maze.minotaur_hp = maze.minotaur_hp * 0.5
+            maze.ow_min_amulet_used = True 
+        if t_speed_amulet:
+            maze.MOVE_INTERVAL = 0.05
+        if min_speed_amulet:
+            commons.MINOTAUR_MOVE_INTERVAL = 0.1
+
+        #win probability 
+        if maze.hero_hp <= 4000: 
+            h_hp = True
+        else:
+            h_hp = False
+        if maze.minotaur_hp <= 5000:
+            m_hp = True
+        else:
+            m_hp = False
+            
+        winProb = prob.win_prob(h_hp, m_hp, sword, shield, hp_amulet, ow_amulet, ow_min_amulet, t_speed_amulet, min_speed_amulet)
 
         # === DRAWING ===
         if not pygame.display.get_init():
@@ -145,15 +177,17 @@ def play(paused):
         
         # Draw inventory bar
         pygame.draw.rect(commons.screen, commons.white, (0, 0, commons.WINDOW_SIZE[0], commons.HUD_HEIGHT))
-        commons.draw_text(f"Inventory:  {maze.inventory}", 'Arial Bold', 30, commons.black, commons.screen, 70, 20)
+        commons.draw_text(f"Inventory:  {maze.inventory}", 'Arial Bold', 20, commons.black, commons.screen, 70, 20)
 
+        #display win prob
+        commons.draw_text(f"Win Prob:  {winProb:.2f}", 'Arial Bold', 20, commons.black, commons.screen, 210, 20)
         #display hp stat
-        commons.draw_text(f"Hero HP", 'Arial Bold', 30, commons.black, commons.screen, 250, 20)
-        commons.draw_text(f"Minotaur HP", 'Arial Bold', 30, commons.black, commons.screen, 500, 20)
+        commons.draw_text(f"Hero HP", 'Arial Bold', 20, commons.black, commons.screen, 350, 20)
+        commons.draw_text(f"Minotaur HP", 'Arial Bold', 20, commons.black, commons.screen, 560, 20)
         #hero health bar
-        commons.draw_health_bar(commons.screen, 300, 10, 100, 20, maze.hero_hp, 1000, (0,255,0))
+        commons.draw_health_bar(commons.screen, 400, 10, 100, 20, maze.hero_hp, maze.max_hero_hp, (0,255,0))
         #minatour health bar
-        commons.draw_health_bar(commons.screen, 570, 10, 100, 20, maze.minotaur_hp, 2000, (255,0,0))
+        commons.draw_health_bar(commons.screen, 620, 10, 100, 20, maze.minotaur_hp, maze.max_minotaur_hp, (255,0,0))
         
 
         # Draw maze offset below HUD
