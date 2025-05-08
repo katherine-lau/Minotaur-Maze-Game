@@ -69,7 +69,7 @@ def inventory():
                 hovered = item
                 
             if hovered:
-                popup_txt = f"{hovered['name']}: {hovered['description']}"
+                popup_txt = f"{hovered['description']}"
                 font = pygame.font.SysFont('Arial', 16)
                 text = font.render(popup_txt, True, commons.red_brown)
                 rect = text.get_rect()
