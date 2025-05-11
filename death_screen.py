@@ -31,6 +31,8 @@ def death_screen():
                         gameplay.main()
                         return  #Go back to main menu
 
+            if not pygame.display.get_init():
+                return
             commons.screen.fill((0, 0, 0))  # Black background
             text = font.render("You have died!", True, (255, 0, 0))
             info = small_font.render("Press ENTER to return to Main Menu", True, (255, 255, 255))
@@ -42,7 +44,7 @@ def defeated_min():
         font = pygame.font.SysFont('Arial', 50)
         small_font = pygame.font.SysFont('Arial', 30)
         running = True
-        gameplay.paused = True
+        commons.paused = True
 
         while running:
             for event in pygame.event.get():
@@ -51,16 +53,20 @@ def defeated_min():
                     
                 elif event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_RETURN:
-                        commons.paused = False 
+                        commons.paused = False
+                        running = False
                         commons.state = 'playing'  
                         return  
 
                     elif event.key == pygame.K_ESCAPE:
                         commons.paused = True
+                        running = False
                         commons.state = 'menu'
                         return
-                
-            commons.screen.fill((0, 0, 0))  # Black background
+            
+            if not pygame.display.get_init():
+                return
+            #pygame.draw.rect(commons.screen, commons.black, (0, 0, commons.WINDOW_SIZE[0], commons.WINDOW_SIZE[1]))  # Black background
             text = font.render("You have defeated the minotaur!", True, (255, 0, 0))
             info = small_font.render("Press ENTER to return to the start", True, (255, 255, 255))
             commons.screen.blit(text, (commons.WINDOW_SIZE[0] // 2 - text.get_width() // 2, commons.WINDOW_SIZE[1] // 3))                

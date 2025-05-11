@@ -156,7 +156,7 @@ def play(paused):
         if t_speed_amulet:
             maze.MOVE_INTERVAL = 0.05
         if min_speed_amulet:
-            commons.MINOTAUR_MOVE_INTERVAL = 0.1
+            commons.MINOTAUR_MOVE_INTERVAL = 0.25
 
         #win probability 
         if maze.hero_hp <= 4000: 
