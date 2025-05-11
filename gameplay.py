@@ -99,10 +99,10 @@ def manual():
         return
     commons.screen.fill(commons.bronze)
     commons.draw_text('HOW TO PLAY', 'Arial', 40, commons.pale_yellow, commons.screen, commons.WINDOW_SIZE[0] / 2, commons.WINDOW_SIZE[1] / 4)
-    commons.draw_text(' - Use arrow keys to move', 'Arial', 30, commons.pale_yellow, commons.screen, commons.WINDOW_SIZE[0] / 2, commons.WINDOW_SIZE[1] / 8 * 3)
-    commons.draw_text(' - I to open inventory (tap I again to close)', 'Arial', 30, commons.pale_yellow, commons.screen, commons.WINDOW_SIZE[0] / 2, commons.WINDOW_SIZE[1] / 8 * 4)
-    commons.draw_text(' - Double tap ESC to pause and then open main menu', 'Arial', 30, commons.pale_yellow, commons.screen, commons.WINDOW_SIZE[0] / 2, commons.WINDOW_SIZE[1] / 8 * 5)
-    commons.draw_text('Press ESC to return', 'Arial', 30, commons.pale_yellow, commons.screen, commons.WINDOW_SIZE[0] / 2, commons.WINDOW_SIZE[1] / 8 * 6)
+    commons.draw_text(' - Use arrow keys to move', 'Arial', 40, commons.pale_yellow, commons.screen, commons.WINDOW_SIZE[0] / 2, commons.WINDOW_SIZE[1] / 8 * 3)
+    commons.draw_text(' - I to open inventory (tap I again to close)', 'Arial', 40, commons.pale_yellow, commons.screen, commons.WINDOW_SIZE[0] / 2, commons.WINDOW_SIZE[1] / 8 * 4)
+    commons.draw_text(' - Double tap ESC to pause and then open main menu', 'Arial', 40, commons.pale_yellow, commons.screen, commons.WINDOW_SIZE[0] / 2, commons.WINDOW_SIZE[1] / 8 * 5)
+    commons.draw_text('Press ESC to return', 'Arial', 40, commons.pale_yellow, commons.screen, commons.WINDOW_SIZE[0] / 2, commons.WINDOW_SIZE[1] / 8 * 6)
     pygame.display.flip()
     
 """Main()"""
@@ -114,6 +114,9 @@ def main(): #Where all the code is going to go
     commons.inventory_open = False
     ctrl_pressed = False    #track if ctrl key is pressed for quit
     
+    #resetting the speed of hero and minatour
+    maze.MOVE_INTERVAL = 0.1
+    commons.MINOTAUR_MOVE_INTERVAL = 0.5 
     
     commons.game_start()
     print("Game started.")
