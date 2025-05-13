@@ -2,7 +2,7 @@
 import pygame
 
 """Screen vars"""
-GRID_SIZE = 33#47  # Must be odd to ensure single-width walls
+GRID_SIZE = 33 #47  # Must be odd to ensure single-width walls
 CELL_SIZE = 23
 HUD_HEIGHT = 30
 WINDOW_SIZE = (GRID_SIZE * CELL_SIZE, GRID_SIZE * CELL_SIZE + HUD_HEIGHT)
