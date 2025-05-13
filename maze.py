@@ -55,7 +55,17 @@ def get_random_empty_min_cell(maze):
 
 # === SETUP MAZE ===
 def setup():
-    global _maze, entrance, inventory, inventory_items, available_items, items, item, hero_pos, minotaur_pos, minotaur_path, minotaur_timer, move_timer, MOVE_INTERVAL, held_keys, visitedfog
+    global _maze, entrance, inventory, inventory_items, available_items, items, item, hero_pos, minotaur_pos, minotaur_path, minotaur_timer, move_timer, MOVE_INTERVAL, held_keys, visitedfog, hero_hp, minotaur_hp
+    global hp_amulet_used, ow_amulet_used, ow_min_amulet_used
+    global max_hero_hp, max_minotaur_hp
+    max_hero_hp = 10000
+    max_minotaur_hp = 20000
+    hero_hp = max_hero_hp
+    minotaur_hp = max_minotaur_hp
+    ow_amulet_used = False
+    ow_min_amulet_used = False
+    hp_amulet_used = False 
+
     
     _maze, entrance = generate_maze(commons.GRID_SIZE)
     hero_pos = entrance

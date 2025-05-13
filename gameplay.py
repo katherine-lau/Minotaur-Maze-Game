@@ -69,11 +69,11 @@ def inventory():
                 hovered = item
                 
             if hovered:
-                popup_txt = f"{hovered['name']}: {hovered['description']}"
+                popup_txt = f"{hovered['description']}"
                 font = pygame.font.SysFont('Arial', 16)
-                text = font.render(popup_txt, True, commons.bronze)
+                text = font.render(popup_txt, True, commons.red_brown)
                 rect = text.get_rect()
-                rect.topleft = (pygame.mouse.get_pos()[0] + 10, pygame.mouse.get_pos()[1] + 10)
+                rect.bottomleft = (pygame.mouse.get_pos()[0] + 10, pygame.mouse.get_pos()[1] + 10)
                 pygame.draw.rect(commons.screen, commons.pale_yellow, rect.inflate(10, 10))
                 pygame.draw.rect(commons.screen, commons.black, rect.inflate(10, 10), 2)
                 commons.screen.blit(text, rect)
@@ -101,7 +101,7 @@ def manual():
     commons.draw_text('HOW TO PLAY', 'Arial', 40, commons.pale_yellow, commons.screen, commons.WINDOW_SIZE[0] / 2, commons.WINDOW_SIZE[1] / 4)
     commons.draw_text(' - Use arrow keys to move', 'Arial', 40, commons.pale_yellow, commons.screen, commons.WINDOW_SIZE[0] / 2, commons.WINDOW_SIZE[1] / 8 * 3)
     commons.draw_text(' - I to open inventory (tap I again to close)', 'Arial', 40, commons.pale_yellow, commons.screen, commons.WINDOW_SIZE[0] / 2, commons.WINDOW_SIZE[1] / 8 * 4)
-    commons.draw_text(' - Double tap ESC to pause', 'Arial', 40, commons.pale_yellow, commons.screen, commons.WINDOW_SIZE[0] / 2, commons.WINDOW_SIZE[1] / 8 * 5)
+    commons.draw_text(' - Double tap ESC to pause and then open main menu', 'Arial', 40, commons.pale_yellow, commons.screen, commons.WINDOW_SIZE[0] / 2, commons.WINDOW_SIZE[1] / 8 * 5)
     commons.draw_text('Press ESC to return', 'Arial', 40, commons.pale_yellow, commons.screen, commons.WINDOW_SIZE[0] / 2, commons.WINDOW_SIZE[1] / 8 * 6)
     pygame.display.flip()
     
@@ -114,6 +114,9 @@ def main(): #Where all the code is going to go
     commons.inventory_open = False
     ctrl_pressed = False    #track if ctrl key is pressed for quit
     
+    #resetting the speed of hero and minatour
+    maze.MOVE_INTERVAL = 0.1
+    commons.MINOTAUR_MOVE_INTERVAL = 0.5 
     
     commons.game_start()
     print("Game started.")

@@ -2,12 +2,12 @@
 import pygame
 
 """Screen vars"""
-GRID_SIZE = 47  # Must be odd to ensure single-width walls
+GRID_SIZE = 33 #47  # Must be odd to ensure single-width walls
 CELL_SIZE = 23
 HUD_HEIGHT = 30
 WINDOW_SIZE = (GRID_SIZE * CELL_SIZE, GRID_SIZE * CELL_SIZE + HUD_HEIGHT)
 FPS = 60
-MINOTAUR_MOVE_INTERVAL = 0.8  # seconds between minotaur steps
+MINOTAUR_MOVE_INTERVAL = 0.5  # seconds between minotaur steps
 NUM_ITEMS = 20  # Number of yellow squares
 
 """Color vars"""
@@ -74,6 +74,19 @@ def exit_game():
     global running
     running = False
     pygame.quit()
+
+def draw_health_bar(surface, x, y, width, height, current_hp, max_hp, color, border_color=(0,0,0)):
+    #Calculate health percentage
+    health_ratio = current_hp / max_hp
+    health_width = int(width * health_ratio)
+    
+    #Draw background (border)
+    pygame.draw.rect(surface, border_color, (x-2, y-2, width+4, height+4))  #Slightly bigger for border
+    pygame.draw.rect(surface, (150, 0, 0), (x, y, width, height))  #Dark red background (lost health)
+    
+    #Draw current health
+    pygame.draw.rect(surface, color, (x, y, health_width, height))
+
 
 state = 'menu'  #menu, manual, playing
 inventory_open = False
