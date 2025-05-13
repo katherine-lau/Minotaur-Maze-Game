@@ -44,29 +44,26 @@ def defeated_min():
         font = pygame.font.SysFont('Arial', 50)
         small_font = pygame.font.SysFont('Arial', 30)
         running = True
-        commons.paused = True
 
         while running:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    commons.exit_game()  
-                    
+                    commons.exit_game()
                 elif event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_RETURN:
-                        commons.paused = False
-                        running = False
-                        commons.state = 'playing'  
-                        return  
-
-                    elif event.key == pygame.K_ESCAPE:
+                        for item in maze.inventory_items[:]:
+                            maze.inventory -= 1
+                            maze.inventory_items.remove(item)
+                            links.available_items.append(item)
                         commons.paused = True
-                        running = False
+                        commons.playing = False
                         commons.state = 'menu'
-                        return
+                        gameplay.main()
+                        return  #Go back to main menu
             
             if not pygame.display.get_init():
                 return
-            #pygame.draw.rect(commons.screen, commons.black, (0, 0, commons.WINDOW_SIZE[0], commons.WINDOW_SIZE[1]))  # Black background
+            pygame.draw.rect(commons.screen, commons.black, (0, 0, commons.WINDOW_SIZE[0], commons.WINDOW_SIZE[1]))  # Black background
             text = font.render("You have defeated the minotaur!", True, (255, 0, 0))
             info = small_font.render("Press ENTER to return to the start", True, (255, 255, 255))
             commons.screen.blit(text, (commons.WINDOW_SIZE[0] // 2 - text.get_width() // 2, commons.WINDOW_SIZE[1] // 3))                
